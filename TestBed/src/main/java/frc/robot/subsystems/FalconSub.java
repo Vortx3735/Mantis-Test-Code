@@ -16,6 +16,12 @@ public class FalconSub extends SubsystemBase {
   public FalconSub(int ID) {
     falcon = new TalonFX(ID);
     falcon.setNeutralMode(NeutralMode.Coast);
+  } 
+
+  public FalconSub(int ID, boolean reversed) {
+    falcon = new TalonFX(ID);
+    falcon.setNeutralMode(NeutralMode.Coast);
+    falcon.setInverted(reversed);
   }
 
   public void move(double percentSpeed){

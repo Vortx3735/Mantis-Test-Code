@@ -29,16 +29,19 @@ public class FalconCom extends CommandBase {
     if (MathUtil.applyDeadband(-RobotContainer.con1.getLeftY(), 0.1) == 0)
     {
         falcon.move(0);
-    } else
-    {
+    } else {
         falcon.move(-RobotContainer.con1.getLeftY());
     }
+  }
+
+  public void stop() {
+    falcon.move(0);
   }
 
   
 
   public void start() {
-    falcon.move(0.3);
+    falcon.move(1);
   }
 
   // Called when the command is initially scheduled.

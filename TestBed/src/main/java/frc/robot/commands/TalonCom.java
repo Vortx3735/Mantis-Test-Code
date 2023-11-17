@@ -26,7 +26,7 @@ public class TalonCom extends CommandBase {
   }
 
   public void start() {
-    talon.move(RobotContainer.con1.getR2Axis());
+    talon.move(0.5);
   }
   
   public void stop() {
@@ -34,7 +34,7 @@ public class TalonCom extends CommandBase {
   }
 
   public void rev() {
-    talon.move(-RobotContainer.con1.getL2Axis());
+    talon.move(-0.5);
   }
 
   // Called when the command is initially scheduled.

@@ -8,6 +8,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,11 +28,15 @@ public class RobotContainer {
   // public static SparkMAXSub sparksub = new SparkMAXSub(0);
   // public static SparkMAXCom spark = new SparkMAXCom(sparksub);
 
-  public static FalconSub falconsub = new FalconSub(1);
-  public static FalconCom falcon = new FalconCom(falconsub);
+  public static FalconSub leftshooterfalcon = new FalconSub(5);
+  public static FalconCom leftshooter = new FalconCom(leftshooterfalcon);
 
-  // public static TalonSub talonsub = new TalonSub(2);
-  // public static TalonCom talon = new TalonCom(talonsub);
+  public static FalconSub rightshooterfalcon = new FalconSub(6, true);
+  public static FalconCom rightshooter = new FalconCom(rightshooterfalcon);
+
+  public static TalonSub talonsub = new TalonSub(4);
+  public static TalonCom talon = new TalonCom(talonsub);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -44,19 +49,26 @@ public class RobotContainer {
     //   )
     // );
 
-    falconsub.setDefaultCommand(
+    leftshooterfalcon.setDefaultCommand(
       new RunCommand(
-        falcon::moveStick,
-        falconsub
+        leftshooter::stop,
+        leftshooterfalcon
       )
     );
 
-    // talonsub.setDefaultCommand(
-    //   new RunCommand(
-    //     talon::stop,
-    //     talonsub
-    //   )
-    // );
+    rightshooterfalcon.setDefaultCommand(
+      new RunCommand(
+        rightshooter::stop,
+        rightshooterfalcon
+      )
+    );
+
+    talonsub.setDefaultCommand(
+      new RunCommand(
+        talon::stop,
+        talonsub
+      )
+    );
   }
 
   /**
@@ -70,19 +82,33 @@ public class RobotContainer {
    */
   private void configureBindings() {
     
-    // con1.l2.onTrue(
-    //   new RunCommand(
-    //     talon::rev, 
-    //     talonsub
-    //   )
-    // );
+    con1.circle.whileTrue(
+      new RunCommand(
+        talon::rev, 
+        talonsub
+      )
+    );
 
-    // con1.r2.onTrue(
-    //   new RunCommand(
-    //     talon::start, 
-    //     talonsub
-    //   )
-    // );
+    con1.triangle.whileTrue(
+      new RunCommand(
+        talon::start, 
+        talonsub
+      )
+    );
+
+    con1.circle.whileTrue(
+      new ParallelCommandGroup(
+        new RunCommand(
+          leftshooter::start,
+          leftshooterfalcon
+        ),
+        new RunCommand(
+          rightshooter::start,
+          rightshooterfalcon
+        )
+      )
+      
+    );
 
   }
 
